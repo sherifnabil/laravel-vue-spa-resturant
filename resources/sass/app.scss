@@ -6,3 +6,15 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.validation-message {
+    color: $red;
+    size: 0.9em
+}
+
+.container-padding {
+    padding: 10px;
+}
+.pointer{
+    cursor: pointer;
+}

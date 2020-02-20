@@ -18,6 +18,8 @@ class CreateMenuesTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->float('price', 6,2);
+            $table->unsignedInteger('resturant_id')->default(1);
+            $table->unsignedInteger('category_id')->default(1);
             $table->timestamps();
         });
     }

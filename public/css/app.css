@@ -10884,3 +10884,16 @@ a.text-dark:focus {
   }
 }
 
+.validation-message {
+  color: #e3342f;
+  size: 0.9em;
+}
+
+.container-padding {
+  padding: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+

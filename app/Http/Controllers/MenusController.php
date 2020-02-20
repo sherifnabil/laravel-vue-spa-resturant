@@ -2,83 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menue;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Services\MenueService;
+use App\Http\Requests\MenueRequest;
+use App\Rules\RestoCategryValidate;
 
 class MenusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    
+    public function index($id, MenueService $service)
     {
-        //
+        $resturant_id = $id;
+        $menues = $service->getMenueWithCategory($id);
+        return view('menus.menu-index', compact('menues', 'resturant_id'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(MenueRequest $request)
     {
-        //
+        $category =  Category::where('resturant_id', $request->resturant_id)->where('name', $request->category)->first();
+        $menu = Menue::create([
+            'name'              =>  $request->item,
+            'price'             =>  $request->price,
+            'description'       =>  $request->description,
+            'category_id'       =>  $category->id,
+            'resturant_id'      =>  $request->resturant_id,
+        ]);
+        return response()->json($menu, 202);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function getResturantMenu(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $request->validate([
+            'restoId'   =>  'required|numeric|exists:resturants,id'
+        ]);
+        $menuItems = Menue::where('resturant_id', $request->restoId)
+        ->orderBy('category_id')
+        ->get();
+        return response()->json($menuItems);
     }
 }

@@ -2,13 +2,15 @@
 
 namespace App;
 
+use App\Models\Resturant;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +21,12 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+
+    public function resturants()
+    {
+        return $this->hasMany(Resturant::class, 'owner_id')
+        ->orderBy('name', 'ASC');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

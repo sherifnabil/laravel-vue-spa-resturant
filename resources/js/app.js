@@ -5,9 +5,17 @@
  */
 
 require('./bootstrap');
+require('vue-multiselect/dist/vue-multiselect.min.css');
+import Turbolinks from 'turbolinks';
+import VModal from 'vue-js-modal';
+import TurbolinksAdapter from 'vue-turbolinks';
 
 window.Vue = require('vue');
 
+Turbolinks.start();
+Vue.use(TurbolinksAdapter)
+
+Vue.use(VModal);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,7 +27,6 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27,6 +34,17 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
+Vue.component('menue-container', require('./components/modules/menues/MenueContainer.vue').default);
+Vue.component('card-component', require('./components/Card.vue').default);
+Vue.component('resto-group', require('./components/modules/restos/RestoGroup.vue').default);
+Vue.component('order-group', require('./components/modules/orders/OrderGroup.vue').default);
+Vue.component('manage-orderes', require('./components/modules/orders/ManageOrderes.vue').default);
+
+window.bus = new Vue({});
+
+document.addEventListener('turbolinks:load', () => {
+    const app = new Vue({
+        el: '#app',
+    });
 });
+
